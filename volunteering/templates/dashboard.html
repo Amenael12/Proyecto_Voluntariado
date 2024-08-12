@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style4.css' %}">
+        <title>Panel de Administración</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: #ddd;
+            color: black;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .content {
+            padding: 20px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .logout-container {
+            margin-left: auto;
+        }
+    </style>
+    </head>
+    <div class="navbar">
+        <a href="{% url 'custom_admin:admin_dashboard' %}">Inicio</a>
+        <div class="dropdown">
+            <button class="dropbtn">Gestión 
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="{% url 'custom_admin:user_list' %}">Usuarios</a>
+                <a href="{% url 'custom_admin:foundation_list' %}">Fundaciones</a>
+            </div>
+        </div>
+        <a href="{% url 'custom_admin:foundation_create' %}">Registro Fundaciones</a>
+        <div class="logout-container">
+            <a href="{% url 'login' %}">Cerrar sesión</a>
+        </div>
+    </div>
+
+    <body>
+
+        <div class="content">
+
+            <h1>Sistema de Voluntariado</h1>
+            <p>Bienvenido a nuestro innovador sistema de conexión entre voluntarios y fundaciones. Esta plataforma está diseñada para facilitar el encuentro entre personas que desean donar su tiempo y habilidades, y organizaciones que necesitan apoyo para sus causas nobles.</p>
+            
+            <h2>Características principales:</h2>
+            <ul>
+                <li><strong>Búsqueda inteligente:</strong> Los voluntarios pueden encontrar oportunidades basadas en sus intereses, habilidades y disponibilidad.</li>
+                <li><strong>Perfiles detallados:</strong> Las fundaciones pueden crear perfiles completos describiendo su misión, proyectos y necesidades específicas.</li>
+                <li><strong>Geolocalización:</strong> Encuentra oportunidades de voluntariado cerca de ti o en áreas de tu interés.</li>
+                <li><strong>Gestión de voluntarios:</strong> Las fundaciones pueden administrar eficientemente sus programas de voluntariado.</li>
+                <li><strong>Retroalimentación y evaluaciones:</strong> Sistema de evaluaciones mutuas para mejorar la experiencia de voluntariado.</li>
+            </ul>
+    
+            <p>Nuestra misión es crear un puente eficiente entre la buena voluntad de las personas y las necesidades de las organizaciones benéficas, fomentando un impacto social positivo en nuestras comunidades.</p>
+        </div>
+       
+        
+        <script src="" async defer></script>
+    </body>
+</html>

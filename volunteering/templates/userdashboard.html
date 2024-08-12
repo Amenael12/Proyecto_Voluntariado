@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Colimes, Guayas, Ecuador</title>
+    
+    <!-- Incluir CSS de Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        #sidebar * {
+            transform: none !important;
+        }
+        
+        #sidebar nav ul li a, #sidebar h3, #sidebar p {
+            transform: skew(-10deg) rotate(-10deg);
+        }
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .edit-btn {
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .edit-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin-bottom: 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        
+        #main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        #toggleSidebar {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background: #6e8efb;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        #sidebar.sidebar-closed {
+            transform: translateX(-250px);
+        }
+        
+        #main-content.content-expanded {
+            margin-left: 0;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleSidebar">☰</button>
+    <div id="sidebar" class="sidebar-open">
+        <div class="profile-section">
+            {% load static %}
+            <img src="{{ user.get_photo_url }}" alt="Foto de perfil" class="profile-pic">
+            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            <p>{{ user.email }}</p>
+            <button onclick="editProfile()" class="edit-btn">Editar Perfil</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="#">Configuración</a></li>
+                <li><a href="#">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="main-content">
+        <h1>Mapa de Colimes, Guayas, Ecuador</h1>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <script>
+        var colimesCoords = [-1.5453, -79.9961];
+        var map = L.map('map').setView(colimesCoords, 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.marker(colimesCoords).addTo(map)
+            .bindPopup('Colimes, Guayas, Ecuador')
+            .openPopup();
+
+        // Toggle sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('sidebar-closed');
+            document.getElementById('main-content').classList.toggle('content-expanded');
+            setTimeout(function() { map.invalidateSize() }, 300);
+        });
+    </script>
+    
+</body>
+</html>

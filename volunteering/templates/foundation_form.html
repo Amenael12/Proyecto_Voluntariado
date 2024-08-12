@@ -1,0 +1,177 @@
+
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+        <title>Panel de Administración</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: #ddd;
+            color: black;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .content {
+            padding: 20px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .logout-container {
+            margin-left: auto;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="navbar">
+            <a href="{% url 'custom_admin:admin_dashboard' %}">Inicio</a>
+            <div class="dropdown">
+                <button class="dropbtn">Gestión 
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'custom_admin:user_list' %}">Usuarios</a>
+                    <a href="{% url 'custom_admin:foundation_list' %}">Fundaciones</a>
+                </div>
+            </div>
+            <a href="{% url 'custom_admin:foundation_create' %}">Registro Fundaciones</a>
+            <div class="logout-container">
+                <a href="{% url 'login' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    
+        <div class="content">
+            
+        </div>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <style>
+            #map { 
+                height: 300px; 
+                width: 80%; 
+                margin: 20px auto; 
+            }
+        </style>
+       
+       
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div id="map"></div>
+            <button type="submit">Guardar</button>
+        </form>
+        
+        <script>
+            var map = L.map('map', {
+                doubleClickZoom: false
+            }).setView([0, 0], 2);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        
+            var marker = L.marker([0, 0], {draggable: true}).addTo(map);
+        
+            function updateFields(latlng) {
+                document.getElementById('id_latitude').value = latlng.lat.toFixed(6);
+                document.getElementById('id_longitude').value = latlng.lng.toFixed(6);
+            }
+        
+            marker.on('dragend', function(event) {
+                updateFields(marker.getLatLng());
+            });
+        
+            map.on('dblclick', function(event) {
+                marker.setLatLng(event.latlng);
+                updateFields(event.latlng);
+            });
+        
+            var initialLat = document.getElementById('id_latitude').value;
+            var initialLng = document.getElementById('id_longitude').value;
+            if (initialLat && initialLng) {
+                marker.setLatLng([initialLat, initialLng]);
+                map.setView([initialLat, initialLng], 13);
+            }
+        
+            document.getElementById('id_latitude').addEventListener('change', updateMarker);
+            document.getElementById('id_longitude').addEventListener('change', updateMarker);
+        
+            function updateMarker() {
+                var lat = parseFloat(document.getElementById('id_latitude').value);
+                var lng = parseFloat(document.getElementById('id_longitude').value);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    marker.setLatLng([lat, lng]);
+                    map.setView([lat, lng], 13);
+                }
+            }
+        
+            
+            map.on('load', function() {
+                map.invalidateSize();
+            });
+        </script>
+        
+    </body>
+</html>
+{% endblock %}
